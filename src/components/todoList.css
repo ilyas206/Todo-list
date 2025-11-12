@@ -1,0 +1,32 @@
+/* apply transitions to all table cells so color/background animate */
+.table > tbody > tr > * {
+  transition: background-color .32s ease-in-out, color .32s ease-in-out, border-top-color .32s ease-in-out;
+  -webkit-transition: background-color .32s ease-in-out, color .32s ease-in-out, border-top-color .32s ease-in-out;
+}
+
+.table > tbody > tr input {
+  cursor: pointer;
+}
+
+/* default non-done rows keep transparent background so transition can animate from/to */
+.table > tbody > tr:not(.done-row) > * {
+  background-color: transparent;
+  color: inherit;
+}
+
+/* done row style (target cells) */
+.table > tbody > tr.done-row > * {
+  background-color: rgba(74, 81, 95, 0.9); /* friendly dark-ish */
+  color: #e6eef6; /* soft light text */
+}
+
+/* hover remains subtle */
+.table > tbody > tr.done-row:hover > * {
+  filter: brightness(1.05);
+}
+
+/* ensure borders and td text inherit */
+.table > tbody > tr.done-row td {
+  border-top-color: rgba(255,255,255,0.04);
+  color: inherit;
+}

@@ -6,11 +6,11 @@ export default function App() {
     const [todos, setTodos] = useState([
         {
             id : 1,
-            label : "Watching React tutorials",
-            details : "Learning some Redux concepts with recent RTK features",
-            date : "2025-11-21",
-            time : "07:33",
-            done : true
+            label : "My birthday",
+            details : "My 20th anniversary",
+            date : "2026-02-11",
+            time : "14:33",
+            done : false
         }
     ])
 

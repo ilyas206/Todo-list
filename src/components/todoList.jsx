@@ -4,6 +4,8 @@ import { validateForm } from "../validation/validateForm";
 import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
 import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import "./todoList.css";
 
 export default function TodoList({todos, onToggleTodo, onAddTodo, onDeleteTodo, onUpdateTodo}) {
 
@@ -154,7 +156,8 @@ export default function TodoList({todos, onToggleTodo, onAddTodo, onDeleteTodo, 
 
     const displayTodos = () => {
         return todos.map(todo => {
-            return <tr key={todo.id} onClick={() => handleViewClick(todo)} className={todo.done ? 'table-success text-center' : 'text-center'}>
+            const rowStyle = `text-center ${todo.done ? 'done-row' : ''}`
+            return <tr key={todo.id} onClick={() => handleViewClick(todo)} className={rowStyle}>
                 <td><input type="checkbox" 
                 className={`form-check-input 
                 ${todo.done && 'bg-success'}`} 
@@ -164,9 +167,9 @@ export default function TodoList({todos, onToggleTodo, onAddTodo, onDeleteTodo, 
                 <td>{todo.date}</td>
                 <td>{todo.time}</td>
                 <td>{todo.label}</td>
-                <td className="d-flex">
-                    <button className="btn btn-info m-1" onClick={(e) => {handleUpdateClick(todo); e.stopPropagation()}}>Update</button>
-                    <button type="button" className="btn btn-danger m-1" onClick={(e) => {handleDeleteClick(todo); e.stopPropagation()}}>Delete</button>
+                <td className="d-flex justify-content-center py-1">
+                    <button className="btn btn-outline-info m-1" onClick={(e) => {handleUpdateClick(todo); e.stopPropagation()}}>Update</button>
+                    <button type="button" className="btn btn-outline-danger m-1" onClick={(e) => {handleDeleteClick(todo); e.stopPropagation()}}>Delete</button>
                 </td>
             </tr>
         })
@@ -180,6 +183,49 @@ export default function TodoList({todos, onToggleTodo, onAddTodo, onDeleteTodo, 
     const handleUpdateChange = () => {
         const isValid = validateForm(uLabel, uDetails, uDate, uTime, setErrors)
         setIsUpdateFormValid(isValid)
+    }
+
+    const viewingTask = () => {
+        const viewDate = new Date(selectedTodo.date)
+        const weekDay = viewDate.toLocaleDateString("en-GB", { weekday: "short" })
+        const day = viewDate.getDate().toString()
+        const month = viewDate.toLocaleDateString("en-GB", { month: "short" })
+        const year = viewDate.getFullYear().toString().slice(2)
+
+        let [hours, minutes] = selectedTodo.time.split(":");
+        hours = String(parseInt(hours, 10));
+
+        return( 
+        <div className="modal-body">
+            <div className="d-flex justify-content-between align-items-center">
+                <div>
+                    <span className="display-6">{hours}</span>
+                    <span> : {minutes}</span>
+                </div>
+
+                <div className="fw-light">
+                    <span className="display-6">{weekDay} {day}</span>
+                    
+                    <span> {month} {year}</span>
+                </div>
+            </div>
+            <hr/>
+            <div className="d-flex align-items-center justify-content-between">
+                <h2 className="fw-light">{selectedTodo.label}</h2>
+                {
+                    selectedTodo.done 
+                    ? <div className="d-flex align-items-center gap-1">
+                        <span className="text-success">Done</span>
+                        <CheckIcon sx={{ fontSize : "1.7rem", color : "success.main" }}/>
+                    </div>
+                    : <div className="d-flex align-items-center gap-1">
+                        <span className="text-danger">Undone</span>
+                        <CloseIcon sx={{ fontSize : "1.7rem", color : "error.main" }}/>
+                    </div>
+                }
+            </div>
+            <p className="fw-light text-muted">{selectedTodo.details}</p>
+        </div>)
     }
 
     return(
@@ -213,12 +259,12 @@ export default function TodoList({todos, onToggleTodo, onAddTodo, onDeleteTodo, 
             </div>
             <div className="d-flex align-items-center justify-content-between">
                 <h2>Task manager</h2>
-                <button className="btn btn-success" onClick={handleAddClick}>New</button>
+                <button className="btn btn-outline-success" onClick={handleAddClick}>New</button>
             </div>
             <hr />
-            <table className="table table-striped">
+            <table className="table">
                 <thead>
-                    <tr>
+                    <tr className="text-center">
                         <th>Done</th>
                         <th>Date</th>
                         <th>Time (24H Format)</th>
@@ -249,7 +295,7 @@ export default function TodoList({todos, onToggleTodo, onAddTodo, onDeleteTodo, 
                 <div className="modal-content">
                     <div className="modal-header">
                     <h5 className="modal-title" id="viewModalLabel">
-                        Viewing
+                        View Task
                     </h5>
                     <button
                         type="button"
@@ -258,14 +304,13 @@ export default function TodoList({todos, onToggleTodo, onAddTodo, onDeleteTodo, 
                         aria-label="Close"
                     ></button>
                     </div> 
-                    <div className="modal-body">
-                        <h4>{selectedTodo.label}</h4>
-                        <p>{selectedTodo.details}</p>
-                    </div>
+                    {
+                        selectedTodo ? viewingTask() : <div><h2 className="m-3">No selected Task</h2></div>
+                    }
                     <div className="modal-footer">
                         <button
                             type="button"
-                            className="btn btn-secondary"
+                            className="btn btn-outline-secondary"
                             data-bs-dismiss="modal"
                         >
                             Return
@@ -310,13 +355,13 @@ export default function TodoList({todos, onToggleTodo, onAddTodo, onDeleteTodo, 
                                 <input
                                     type="submit"
                                     value="Add"
-                                    className="btn btn-success me-2"
+                                    className="btn btn-outline-success me-2"
                                     data-bs-dismiss="modal"
                                     disabled={!isAddFormValid}
                                 />
                                 <button
                                     type="button"
-                                    className="btn btn-secondary"
+                                    className="btn btn-outline-secondary"
                                     data-bs-dismiss="modal"
                                 >
                                     Cancel
@@ -359,22 +404,29 @@ export default function TodoList({todos, onToggleTodo, onAddTodo, onDeleteTodo, 
                             <p className="fw-10">No Task selected</p>
                         </div>
                     }
-                    <div className="modal-footer">
-                        <button
+                    <div className="modal-footer d-flex justify-content-between">
+                        {
+                            !selectedTodo?.done && <span className="text-danger">
+                                This task is undone !
+                            </span>
+                        }
+                        <div className="ms-auto">
+                            <button
                             type="button"
-                            className="btn btn-danger me-2"
+                            className="btn btn-outline-danger me-2"
                             data-bs-dismiss="modal"
                             onClick={handleConfirmDelete}
-                        >
-                            Delete
-                        </button>
-                        <button
-                            type="button"
-                            className="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                        >
-                            Cancel
-                        </button>
+                            >{
+                                !selectedTodo?.done ? "Delete anyway" : "Delete"
+                            }</button>
+                            <button
+                                type="button"
+                                className="btn btn-outline-secondary"
+                                data-bs-dismiss="modal"
+                            >
+                                Cancel
+                            </button>
+                        </div>
                     </div>
                 </div>
                 </div>
@@ -453,13 +505,13 @@ export default function TodoList({todos, onToggleTodo, onAddTodo, onDeleteTodo, 
                                 <input
                                     type="submit"
                                     value="Update"
-                                    className="btn btn-info me-2"
+                                    className="btn btn-outline-info me-2"
                                     data-bs-dismiss="modal"
                                     disabled={!isUpdateFormValid}
                                 />
                                 <button
                                     type="button"
-                                    className="btn btn-secondary"
+                                    className="btn btn-outline-secondary"
                                     data-bs-dismiss="modal"
                                 >
                                     Cancel
