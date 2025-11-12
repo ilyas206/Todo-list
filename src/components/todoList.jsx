@@ -185,7 +185,7 @@ export default function TodoList({todos, onToggleTodo, onAddTodo, onDeleteTodo, 
         setIsUpdateFormValid(isValid)
     }
 
-    const viewingTask = () => {
+    const viewingTodo = () => {
         const viewDate = new Date(selectedTodo.date)
         const weekDay = viewDate.toLocaleDateString("en-GB", { weekday: "short" })
         const day = viewDate.getDate().toString()
@@ -258,7 +258,7 @@ export default function TodoList({todos, onToggleTodo, onAddTodo, onDeleteTodo, 
                 </Collapse>
             </div>
             <div className="d-flex align-items-center justify-content-between">
-                <h2>Task manager</h2>
+                <h2>TODOs List</h2>
                 <button className="btn btn-outline-success" onClick={handleAddClick}>New</button>
             </div>
             <hr />
@@ -295,7 +295,7 @@ export default function TodoList({todos, onToggleTodo, onAddTodo, onDeleteTodo, 
                 <div className="modal-content">
                     <div className="modal-header">
                     <h5 className="modal-title" id="viewModalLabel">
-                        View Task
+                        View Todo
                     </h5>
                     <button
                         type="button"
@@ -305,7 +305,7 @@ export default function TodoList({todos, onToggleTodo, onAddTodo, onDeleteTodo, 
                     ></button>
                     </div> 
                     {
-                        selectedTodo ? viewingTask() : <div><h2 className="m-3">No selected Task</h2></div>
+                        selectedTodo ? viewingTodo() : <div><h2 className="m-3">No selected Todo</h2></div>
                     }
                     <div className="modal-footer">
                         <button
@@ -385,7 +385,7 @@ export default function TodoList({todos, onToggleTodo, onAddTodo, onDeleteTodo, 
                 <div className="modal-content">
                     <div className="modal-header">
                     <h5 className="modal-title" id="deleteModalLabel">
-                        Confirm deleting Task
+                        Confirm deleting Todo
                     </h5>
                     <button
                         type="button"
@@ -401,13 +401,13 @@ export default function TodoList({todos, onToggleTodo, onAddTodo, onDeleteTodo, 
                             <p>{selectedTodo.details}</p>
                         </div>
                         : <div className="modal-body">
-                            <p className="fw-10">No Task selected</p>
+                            <p className="fw-10">No Todo selected</p>
                         </div>
                     }
                     <div className="modal-footer d-flex justify-content-between">
                         {
                             !selectedTodo?.done && <span className="text-danger">
-                                This task is undone !
+                                This todo is undone !
                             </span>
                         }
                         <div className="ms-auto">
@@ -444,7 +444,7 @@ export default function TodoList({todos, onToggleTodo, onAddTodo, onDeleteTodo, 
                 <div className="modal-content">
                     <div className="modal-header">
                     <h5 className="modal-title" id="updateModalLabel">
-                        Update Task
+                        Update Todo
                     </h5>
                     <button
                         type="button"
