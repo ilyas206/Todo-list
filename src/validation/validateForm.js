@@ -9,17 +9,26 @@ export const validateForm = (label, details, date, time, setErrors) => {
 
     // Title validation
 
+    const maxLabelLength = 20
+
     if(labelValue.trim() === ''){
         setErrors(prevState => {
             return {...prevState, 
             ...{label : "Field required"}}
         })
         isFormValid = false
+    }else if(maxLabelLength <= labelValue.length) {
+        setErrors(prevState => {
+            return {...prevState, 
+            ...{label : `Too long ! Label should be less than ${maxLabelLength} characters`}}
+        })
+        isFormValid = false
     }
 
-    // Description validation
+    // Details validation
 
     const minDetailsLength = 25
+    const maxDetailsLength = 120
     const currentDetailsLength = detailsValue.length
     
     if(detailsValue.trim() === ''){
@@ -32,7 +41,15 @@ export const validateForm = (label, details, date, time, setErrors) => {
         setErrors(prevState => {
             return {
                 ...prevState,
-                ...{details : `Details should be greater than ${minDetailsLength} characters (${currentDetailsLength} / ${minDetailsLength})`}
+                ...{details : `Too short ! Details should be greater than ${minDetailsLength} characters (${currentDetailsLength} / ${minDetailsLength})`}
+            }
+        })
+        isFormValid = false
+    }else if(maxDetailsLength <= currentDetailsLength ){
+        setErrors(prevState => {
+            return {
+                ...prevState,
+                ...{details : `Too long ! Details should be less than ${maxDetailsLength} characters`}
             }
         })
         isFormValid = false

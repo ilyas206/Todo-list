@@ -7,7 +7,7 @@ export default function App() {
         {
             id : 1,
             label : "My birthday",
-            details : "My 20th anniversary",
+            details : "This is finally my 20th anniversary",
             date : "2026-02-11",
             time : "14:33",
             done : false

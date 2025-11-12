@@ -1,2 +1,1 @@
-change date and time display in the main table
-add some validation to label and details fields to be characters-limited
+adding filtering system for month and done, undone todos
